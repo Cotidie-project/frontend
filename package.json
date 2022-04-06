@@ -18,6 +18,7 @@
         "@types/node": "17.0.23",
         "@types/react": "17.0.43",
         "@types/react-dom": "17.0.14",
+        "cz-conventional-changelog": "3.3.0",
         "eslint": "8.12.0",
         "eslint-config-next": "12.1.4",
         "eslint-config-prettier": "^8.5.0",
@@ -29,5 +30,15 @@
     "lint-staged": {
         "*.js": "eslint --cache --fix",
         "*.{js,css,md}": "prettier --write"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "husky": {
+        "hooks": {
+            "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+        }
     }
 }
