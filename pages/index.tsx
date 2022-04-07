@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 
 const Home: NextPage = () => {
-    const [loggedin, setLoggedin] = useState(true);
+    const [loggedin, setLoggedin] = useState(false);
     const router = useRouter();
     useEffect(() => {
         if (loggedin) router.push("/app");
@@ -12,9 +12,19 @@ const Home: NextPage = () => {
     return loggedin ? (
         <main></main>
     ) : (
-        <main>
+        <main className="bg-[#07070A] h-screen text-white">
             <Navbar></Navbar>
-            <h1>Landing Page here</h1>
+            <div className="py-24 flex flex-col items-center text-5xl font-extrabold">
+                <div>
+                    The Planner{" "}
+                    <strong className="underline decoration-[#BC248C] decoration-[6px]">
+                        that Works
+                    </strong>
+                    <a className="bg-gradient-to-r from-[#BC248C] to-[#F75F8C] bg-clip-text text-transparent">
+                        .
+                    </a>
+                </div>
+            </div>
         </main>
     );
 };
