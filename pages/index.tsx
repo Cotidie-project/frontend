@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
+import Accordion from '../components/accordion';
 import Image from "next/image";
 import logo from "../public/logo.png";
 import screenshot from "../public/screenshot.png";
@@ -341,7 +342,9 @@ const Home: NextPage = () => {
                     </div>
                     &nbsp;&nbsp;&nbsp;
                     <div className="py-8"></div>
-                    <div></div>
+                    <div>
+                        <Accordion title={"test"} content={"testtestsetsetsetstsetset"} />
+                    </div>
                 </div>
             </main>
         </>
