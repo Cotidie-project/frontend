@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { NextPage } from "next";
-import { useRef, useState } from "react";
+import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react";
 
 interface Props {
     heading: string;
@@ -7,17 +8,41 @@ interface Props {
     content: { title: string; desc: string }[];
 }
 
+type modifedContentType = {
+    title: string;
+    desc: string;
+    ref: RefObject<HTMLDivElement>;
+    isOpen: boolean;
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+};
+
 const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-    const expandContent = () => {
-        setIsOpen(!isOpen);
-        if (ref.current) {
-            if (isOpen) {
-                ref.current.style.maxHeight = "0px";
+    const modifedContent: modifedContentType[] = [];
+    for (const item of content) {
+        const [isOpen, setIsOpen] = useState(false);
+        modifedContent.push({
+            title: item.title,
+            desc: item.desc,
+            ref: useRef<HTMLDivElement>(null),
+            isOpen,
+            setIsOpen,
+        });
+    }
+
+    const expandContent = (content: {
+        title: string;
+        desc: string;
+        ref: RefObject<HTMLDivElement>;
+        isOpen: boolean;
+        setIsOpen: Dispatch<SetStateAction<boolean>>;
+    }) => {
+        content.setIsOpen(!content.isOpen);
+        if (content.ref.current) {
+            if (content.isOpen) {
+                content.ref.current.style.maxHeight = "0px";
             } else {
-                ref.current.style.maxHeight = `${
-                    ref.current.scrollHeight + 32
+                content.ref.current.style.maxHeight = `${
+                    content.ref.current.scrollHeight + 32
                 }px`;
             }
         }
@@ -30,7 +55,7 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
                 rel="stylesheet"
             />
 
-            <div className="w-6/12 bg-gray-800 mx-auto rounded-xl">
+            <div className="w-max bg-gray-800 mx-auto rounded-xl">
                 <div className="p-10 shadow-2xl">
                     <h3 className="text-lg font-bold text-white">{heading}</h3>
                     <p className="text-sm font-semibold text-gray-600 my-3">
@@ -39,21 +64,24 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
 
                     <div className="h-1 w-full mx-auto border-b my-5"></div>
 
-                    {content.map((item, index) => (
-                        <div className="transition hover:bg-gray-600 rounded-full" key={index}>
+                    {modifedContent.map((item, index) => (
+                        <div
+                            className="transition hover:bg-gray-600 rounded-full"
+                            key={index}
+                        >
                             <div
-                                onClick={expandContent}
+                                onClick={() => expandContent(item)}
                                 className="accordion-header cursor-pointer transition flex space-x-5 px-5 items-center h-16"
                             >
                                 <i
                                     className={`fas ${
-                                        isOpen ? "fa-minus" : "fa-plus"
+                                        item.isOpen ? "fa-minus" : "fa-plus"
                                     }`}
                                 ></i>
                                 <h3>{item.title}</h3>
                             </div>
                             <div
-                                ref={ref}
+                                ref={item.ref}
                                 className="accordion-content px-5 pt-0 overflow-hidden max-h-0"
                                 style={{
                                     transition:
