@@ -3,13 +3,19 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
-import Accordion from '../components/accordion';
+import Accordion from "../components/accordion";
 import Image from "next/image";
 import logo from "../public/logo.png";
 import screenshot from "../public/screenshot.png";
 
 const Home: NextPage = () => {
     const [loggedin, setLoggedin] = useState(false);
+    const [faq, setFaq] = useState<{ title: string; desc: string }[]>([
+        { title: "What does Cotidie mean?", desc: "" },
+        { title: "Why is this free?", desc: "" },
+        { title: "How does it work?", desc: "" },
+        { title: "How is it different from other day planners?", desc: "" },
+    ]);
     const router = useRouter();
     useEffect(() => {
         if (loggedin) router.push("/app");
@@ -343,7 +349,13 @@ const Home: NextPage = () => {
                     &nbsp;&nbsp;&nbsp;
                     <div className="py-8"></div>
                     <div>
-                        <Accordion title={"test"} content={"testtestsetsetsetstsetset"} />
+                        <Accordion
+                            heading={"Frequently Asked Questions"}
+                            headingCaption={
+                                "Here are the questions everyone asks and our answer to that!"
+                            }
+                            content={faq}
+                        />
                     </div>
                 </div>
             </main>
