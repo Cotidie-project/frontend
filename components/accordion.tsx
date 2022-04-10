@@ -5,12 +5,19 @@ import { Dispatch, RefObject, SetStateAction, useRef, useState } from "react";
 interface Props {
     heading: string;
     headingCaption: string;
-    content: { title: string; desc: string }[];
+    content: {
+        title: string;
+        desc: string;
+        btntext: string;
+        btnhref: string;
+    }[];
 }
 
 type modifedContentType = {
     title: string;
     desc: string;
+    btntext: string;
+    btnhref: string;
     ref: RefObject<HTMLDivElement>;
     isOpen: boolean;
     setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -23,6 +30,8 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
         modifedContent.push({
             title: item.title,
             desc: item.desc,
+            btntext: item.btntext,
+            btnhref: item.btnhref,
             ref: useRef<HTMLDivElement>(null),
             isOpen,
             setIsOpen,
@@ -32,6 +41,8 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
     const expandContent = (content: {
         title: string;
         desc: string;
+        btntext: string;
+        btnhref: string;
         ref: RefObject<HTMLDivElement>;
         isOpen: boolean;
         setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -55,7 +66,7 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
                 rel="stylesheet"
             />
 
-            <div className="w-max bg-gray-800 mx-auto rounded-xl">
+            <div className="w-1/2 bg-gray-800 mx-auto rounded-xl">
                 <div className="p-10 shadow-2xl">
                     <h3 className="text-lg font-bold text-white">{heading}</h3>
                     <p className="text-sm font-semibold text-gray-600 my-3">
@@ -65,13 +76,10 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
                     <div className="h-1 w-full mx-auto border-b my-5"></div>
 
                     {modifedContent.map((item, index) => (
-                        <div
-                            className="transition hover:bg-gray-600 rounded-full"
-                            key={index}
-                        >
+                        <div className="transition" key={index}>
                             <div
                                 onClick={() => expandContent(item)}
-                                className="accordion-header cursor-pointer transition flex space-x-5 px-5 items-center h-16"
+                                className="hover:bg-gray-600 rounded-full accordion-header cursor-pointer transition flex space-x-5 px-5 items-center h-16"
                             >
                                 <i
                                     className={`fas ${
@@ -88,12 +96,17 @@ const Accordion: NextPage<Props> = ({ heading, headingCaption, content }) => {
                                         "max-height 0.3s ease-out, padding 0.3s ease",
                                 }}
                             >
-                                <p className="leading-6 font-light pl-9 text-justify">
+                                <p className="leading-6 font-light pl-9 text-justify py-4">
                                     {item.desc}
                                 </p>
-                                <button className="rounded-full bg-indigo-600 text-white font-medium font-lg px-6 py-2 my-5 ml-9">
-                                    Learn more
-                                </button>
+                                <div className="pt-4"></div>
+                                <a
+                                    href={item.btnhref}
+                                    className="rounded-full bg-indigo-600 text-white font-medium font-lg px-6 py-2 my-5 ml-9"
+                                >
+                                    {item.btntext}
+                                </a>
+                                <div className="pb-4"></div>
                             </div>
                         </div>
                     ))}
