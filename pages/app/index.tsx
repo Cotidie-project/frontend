@@ -2,24 +2,74 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import Navbar from "../../components/navbar";
 import Points from "../../components/points";
+import Task, { taskProps } from "../../components/taskcard";
 
 const Home: NextPage = () => {
-    const [totalPoints, setTotalPoints] = useState(420);
+    const [totalPoints, setTotalPoints] = useState(100);
     const [currentPoints, setCurrentPoints] = useState(69);
+
+    // test data
+    const [tasks, setTasks] = useState<taskProps[]>([
+        {
+            title: "Task 1",
+            time: new Date(),
+            description: "This is a description",
+            completed: false,
+        },
+        {
+            title: "Task 2",
+            time: new Date(),
+            description: "This is a description",
+            completed: false,
+        },
+        {
+            title: "Task 2",
+            time: new Date(),
+            description: "This is a description",
+            completed: false,
+        },
+        {
+            title: "Task 2",
+            time: new Date(),
+            description: "This is a description",
+            completed: false,
+        },
+        {
+            title: "Task 2",
+            time: new Date(),
+            description: "This is a description",
+            completed: false,
+        },
+    ]);
 
     return (
         <main className=" bg-background text-white min-h-screen">
             <Navbar />
             <div className="flex flex-row h-full">
-                <div className="flex flex-col w-3/4 m-10 rounded-lg border border-gray-200 shadow-md dark:bg-inherit dark:border-gray-700">
+                <div
+                    className="grid grid-flow-row w-3/4 m-10 absolute top-16 bottom-0 rounded-lg border border-gray-200 shadow-md dark:bg-[#262633] dark:border-gray-700"
+                    style={{ gridTemplateRows: "20% 80%" }}
+                >
                     <Points
                         totalPoints={totalPoints}
                         currentPoints={currentPoints}
                     />
-                    <div className="flex flex-col p-10 gap-4 relative" id="task-area">
-                        <p className="font-semibold text-3xl">Tasks</p>
-                        <div className=" rounded-lg border border-gray-200 shadow-inner dark:bg-inherit dark:border-gray-700">
-                            {}
+                    <div
+                        className="grid grid-rows-2 p-10 pt-2 gap-4 relative min-h-fit"
+                        style={{ gridTemplateRows: "10%" }}
+                        id="task-area"
+                    >
+                        <div className="font-semibold text-3xl">Tasks</div>
+                        <div className="flex flex-col p-5 pr-3 gap-5 min-h-full overflow-x-clip overflow-y-scroll shadow-inner sm:rounded-lg bg-[#20202d]">
+                            {tasks.map((task, index) => (
+                                <Task
+                                    title={task.title}
+                                    time={task.time}
+                                    description={task.description}
+                                    completed={task.completed}
+                                    key={index}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>

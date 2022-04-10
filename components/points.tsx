@@ -8,7 +8,7 @@ interface Props {
 const ProgressBar: NextPage<Props> = ({ totalPoints, currentPoints }) => {
     const [points, setPoints] = useState((currentPoints * 100) / totalPoints);
     return (
-        <div className="flex flex-col p-10 gap-y-1">
+        <div className="flex flex-col relative p-10 gap-y-1">
             <div className="flex justify-between mb-1">
                 <span className="text-xl font-medium text-blue-700 dark:text-white">
                     Points
