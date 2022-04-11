@@ -3,3 +3,28 @@
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
+
+html {
+    @apply bg-background;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    display: block;
+    border-radius: 10px;
+    background-color: rgba(85, 85, 85, 0.48);
+    transition: background-color 2s linear;
+}
+
+.customScroll::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
