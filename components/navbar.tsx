@@ -1,7 +1,8 @@
 import icon from "../public/icon.svg";
 import Image from "next/image";
+import { NextPage } from "next";
 
-const Navbar = () => {
+const Navbar: NextPage = () => {
     return (
         <nav className="bg-transparent px-48 sm:px-4 py-2.5 rounded">
             <div className="px-48 container flex flex-wrap justify-between items-center mx-auto">
