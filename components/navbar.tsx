@@ -1,4 +1,4 @@
-import logo from "../public/logo.png";
+import icon from "../public/icon.svg";
 import Image from "next/image";
 
 const Navbar = () => {
@@ -7,7 +7,7 @@ const Navbar = () => {
             <div className="px-48 container flex flex-wrap justify-between items-center mx-auto">
                 <a href="#" className="flex items-center">
                     <Image
-                        src={logo}
+                        src={icon}
                         className="mr-3 h-6 sm:h-9"
                         width="30"
                         height="30"
