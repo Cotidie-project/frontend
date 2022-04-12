@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import Navbar from "../../components/navbar";
 import Points from "../../components/points";
 import Task, { taskProps } from "../../components/taskcard";
@@ -12,39 +12,55 @@ const Home: NextPage = () => {
     const taskAreaRef = useRef<HTMLDivElement>(null);
 
     // test data
-    const [tasks, setTasks] = useState<taskProps[]>([
+
+    const [tasks, setTasks] = useState([
         {
+            id: 1,
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completed: false,
+            completionPoints: 1,
         },
         {
-            title: "Task 2",
+            id: 12,
+            title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completed: false,
+            completionPoints: 1,
         },
+
         {
-            title: "Task 2",
+            id: 13,
+            title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completed: false,
+            completionPoints: 1,
         },
+
         {
-            title: "Task 2",
+            id: 3,
+            title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completed: false,
+            completionPoints: 1,
         },
+
         {
-            title: "Task 2",
+            id: 2,
+            title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completed: false,
+            completionPoints: 1,
         },
     ]);
 
+    const [completed, setCompleted] = useState<number[]>([]);
+    useEffect(() => {
+        completed.forEach((value) => {
+            setTasks((tasks) => tasks.filter((task) => value !== task.id));
+        });
+        // console.log(completed, tasks);
+    }, [completed]);
     return (
         <>
             <Head>
@@ -85,24 +101,29 @@ const Home: NextPage = () => {
                                     }, 500);
                                 }}
                             >
-                                {tasks.map((task, index) => (
-                                    <div
-                                        onClick={() => {
-                                            setCurrentPoints(
-                                                currentPoints + 10
-                                            );
-                                            console.log("clicked");
-                                        }}
-                                        key={index}
-                                    >
+                                {tasks.length ? (
+                                    tasks.map((task, index) => (
                                         <Task
+                                            id={task.id}
                                             title={task.title}
                                             time={task.time}
                                             description={task.description}
-                                            completed={task.completed}
+                                            setCompleted={setCompleted}
+                                            completedArray={completed}
+                                            points={{
+                                                currentPoints,
+                                                setCurrentPoints,
+                                                completionPoints:
+                                                    task.completionPoints,
+                                            }}
+                                            key={task.id}
                                         />
+                                    ))
+                                ) : (
+                                    <div className="flex items-center justify-center text-center h-full font-thin italic text-6xl text-gray-800">
+                                        No Tasks left
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
                     </div>
