@@ -73,8 +73,47 @@ const Plan: NextPage = () => {
                     </label>
                 </div>
                 <h1 className="text-xl text-gray-300 italic">Add breaks</h1>
+                <form
+                    onSubmit={addBreak}
+                    className="grid grid-cols-4 p-5 py-0 gap-5"
+                    style={{ gridTemplateColumns: "4fr 2fr .25fr 2fr 1fr" }}
+                    id="add-break"
+                >
+                    <input
+                        type="text"
+                        className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
+                        placeholder="Enter Break Name"
+                        name="break-title"
+                        onSubmit={(e) => {
+                            e.currentTarget.value = "";
+                        }}
+                        required
+                        autoComplete="off"
+                    />
+                    <input
+                        type="time"
+                        className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
+                        name="start-time"
+                        required
+                    />
+                    <div className="flex flex-col text-xl font-light text-gray-300 text-center justify-center">
+                        to
+                    </div>
+                    <input
+                        type="time"
+                        className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
+                        name="end-time"
+                        required
+                    />
+                    <button
+                        type="submit"
+                        className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg"
+                    >
+                        + Add Break{" "}
+                    </button>
+                </form>
                 <div
-                    className="customScroll flex flex-col gap-2 justify-center overflow-y-scroll"
+                    className="customScroll flex flex-col-reverse gap-5 overflow-y-scroll"
                     ref={ref}
                     onWheel={(e) => {
                         ref.current?.classList.remove("customScroll");
@@ -112,45 +151,6 @@ const Plan: NextPage = () => {
                             />
                         </div>
                     ))}
-                    <form
-                        onSubmit={addBreak}
-                        className="grid grid-cols-4 p-5 gap-5"
-                        style={{ gridTemplateColumns: "4fr 2fr .25fr 2fr 1fr" }}
-                        id="add-break"
-                    >
-                        <input
-                            type="text"
-                            className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
-                            placeholder="Enter Break Name"
-                            name="break-title"
-                            onSubmit={(e) => {
-                                e.currentTarget.value = "";
-                            }}
-                            required
-                            autoComplete="off"
-                        />
-                        <input
-                            type="time"
-                            className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
-                            name="start-time"
-                            required
-                        />
-                        <div className="flex flex-col text-xl font-light text-gray-300 text-center justify-center">
-                            to
-                        </div>
-                        <input
-                            type="time"
-                            className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
-                            name="end-time"
-                            required
-                        />
-                        <button
-                            type="submit"
-                            className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg"
-                        >
-                            + Add Break{" "}
-                        </button>
-                    </form>
                 </div>
             </div>
         </>
