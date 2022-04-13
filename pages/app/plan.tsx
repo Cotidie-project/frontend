@@ -46,11 +46,14 @@ const Plan: NextPage = () => {
 
         e.currentTarget.reset();
     };
-    const createSchedule = (e: FormEvent<HTMLFormElement>) => { 
-        e.preventDefault()
+    const removeBreak = (index: number) => {
+        setBreaks((breaks) => breaks.filter((_, i) => i !== index));
+    };
+    const createSchedule = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const form = new FormData(e.currentTarget);
         console.log(form.get("task-list"));
-     }
+    };
     return (
         <>
             <Head>
@@ -122,7 +125,7 @@ const Plan: NextPage = () => {
                         type="submit"
                         className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg"
                     >
-                        + Add Break{" "}
+                        + Add Break
                     </button>
                 </form>
                 <div
@@ -138,7 +141,9 @@ const Plan: NextPage = () => {
                     {breaks.map((breakItem, index) => (
                         <div
                             className="grid grid-cols-4 gap-5"
-                            style={{ gridTemplateColumns: "6fr 2fr .5fr 2fr" }}
+                            style={{
+                                gridTemplateColumns: "4fr 2fr .25fr 2fr 1fr",
+                            }}
                             id="add-break"
                             key={index}
                         >
@@ -162,6 +167,12 @@ const Plan: NextPage = () => {
                                 value={`${breakItem.end.getHours()}:${breakItem.end.getMinutes()}`}
                                 disabled
                             />
+                            <button
+                                className="bg-red-500 hover:bg-red-600 text-white my-2 mr-4 font-bold rounded-lg"
+                                onClick={() => removeBreak(index)}
+                            >
+                                Remove
+                            </button>
                         </div>
                     ))}
                 </div>
