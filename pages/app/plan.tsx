@@ -46,6 +46,11 @@ const Plan: NextPage = () => {
 
         e.currentTarget.reset();
     };
+    const createSchedule = (e: FormEvent<HTMLFormElement>) => { 
+        e.preventDefault()
+        const form = new FormData(e.currentTarget);
+        console.log(form.get("task-list"));
+     }
     return (
         <>
             <Head>
@@ -57,13 +62,16 @@ const Plan: NextPage = () => {
                 className="flex flex-col m-10 p-10 gap-8 h-[81vh] rounded-lg text-white border border-gray-200 shadow-md dark:bg-[#262633] dark:border-gray-700"
                 id="main-div"
             >
-                <div className="flex px-2 gap-2 flex-col justify-center">
+                <form
+                    className="flex px-2 gap-2 flex-col justify-center"
+                    onSubmit={createSchedule}
+                >
                     <h1 className="text-xl text-gray-300 italic">
                         Enter list of tasks
                     </h1>
                     <textarea
-                        className="w-full h-32 p-4 resize-none outline-none rounded-lg border border-gray-200 dark:bg-[#20202b] dark:border-gray-700"
-                        id="task-list"
+                        className="w-full p-4 resize-none outline-none rounded-lg border border-gray-200 dark:bg-[#20202b] dark:border-gray-700"
+                        name="task-list"
                     ></textarea>
                     <label
                         htmlFor="task-list"
@@ -71,7 +79,15 @@ const Plan: NextPage = () => {
                     >
                         comma seperated list*
                     </label>
-                </div>
+                    <div className="flex flex-col pr-10 items-end">
+                        <button
+                            className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg"
+                            type="submit"
+                        >
+                            Create Schedule
+                        </button>
+                    </div>
+                </form>
                 <h1 className="text-xl text-gray-300 italic">Add breaks</h1>
                 <form
                     onSubmit={addBreak}
@@ -84,9 +100,6 @@ const Plan: NextPage = () => {
                         className="outline-none px-4 border dark:bg-[#20202b] dark:border-gray-700 rounded-md"
                         placeholder="Enter Break Name"
                         name="break-title"
-                        onSubmit={(e) => {
-                            e.currentTarget.value = "";
-                        }}
                         required
                         autoComplete="off"
                     />
