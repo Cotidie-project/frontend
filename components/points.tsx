@@ -9,7 +9,7 @@ const ProgressBar: NextPage<Props> = ({ totalPoints, currentPoints }) => {
     const [points, setPoints] = useState((currentPoints * 100) / totalPoints);
     useEffect(() => {
         const calculatedPoints = (currentPoints * 100) / totalPoints;
-        console.log(calculatedPoints);
+        // console.log(calculatedPoints);
 
         if (points < 100) {
             if (calculatedPoints > 100) {
