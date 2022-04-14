@@ -10,7 +10,7 @@ const Navbar: NextPage = () => {
             <div className="px-48 container flex flex-wrap justify-between items-center mx-auto">
                 <a href="#" className="flex items-center">
                     <Image
-                        src={logo}
+                        src={icon}
                         className="mr-3 h-6 sm:h-9"
                         width="30"
                         height="30"
@@ -185,7 +185,7 @@ const Navbar: NextPage = () => {
                                 className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                             >
                                 Leaderboard
-                            <a>
+                            </a>
                         </li>
                         <li>
                             <a
