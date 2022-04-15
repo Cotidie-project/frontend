@@ -1,39 +1,44 @@
 import icon from "../public/icon.svg";
 import Image from "next/image";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import router from "next/router";
+import Link from "next/link";
 
-const Navbar: NextPage = () => {
-    const [loggedin, setLoggedin] = useState(true);
+const Navbar: NextPage<{ loggedin: boolean }> = ({ loggedin }) => {
+    useEffect(() => {
+        if (!loggedin) router.push("/");
+        // else if (router.pathname === "/") router.push("/app");
+    }, [loggedin]);
     return loggedin ? (
         <nav className="bg-transparent px-48 sm:px-4 py-2.5 rounded">
             <div className="px-48 container flex flex-wrap justify-between items-center mx-auto">
-                <a href="#" className="flex items-center">
-                    <Image
-                        src={logo}
-                        className="mr-3 h-6 sm:h-9"
-                        width="30"
-                        height="30"
-                        alt="cotidie-logo"
-                    />
-                    &nbsp;
-                    <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                        Cotidie
-                    </span>
-                </a>
+                <Link href={"/"}>
+                    <a className="flex items-center">
+                        <Image
+                            src={icon}
+                            className="mr-3 h-6 sm:h-9"
+                            width="30"
+                            height="30"
+                            alt="cotidie-logo"
+                        />
+                        &nbsp;
+                        <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                            Cotidie
+                        </span>
+                    </a>
+                </Link>
                 <div className="flex md:order-2">
-                    <a
-                        href="#"
-                        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
-                    >
-                        Plan Day
-                    </a>
-                    <a
-                        href="#"
-                        className="bg-white text-[#07070A] rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
-                    >
-                        Plan Week
-                    </a>
+                    <Link href={"/app/plan"}>
+                        <a className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out">
+                            Plan Day
+                        </a>
+                    </Link>
+                    <Link href={"/app/plan"}>
+                        <a className="bg-white text-[#07070A] rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out">
+                            Plan Week
+                        </a>
+                    </Link>
                     <button
                         data-collapse-toggle="mobile-menu-4"
                         type="button"
@@ -74,29 +79,29 @@ const Navbar: NextPage = () => {
                 >
                     <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                         <li>
-                            <a
-                                href="#"
-                                className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                                aria-current="page"
-                            >
-                                Schedule
-                            </a>
+                            <Link href={"/app"}>
+                                <a
+                                    className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                    aria-current="page"
+                                >
+                                    {/* Schedule */}
+                                    Home
+                                </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
-                                className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                            >
-                                Features
-                            </a>
+                            <Link href={`/leaderboard`}>
+                                <a className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                                    Leaderboard
+                                </a>
+                            </Link>
                         </li>
                         <li>
-                            <a
-                                href="#"
-                                className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                            >
-                                Planner
-                            </a>
+                            <Link href={`/app/plan`}>
+                                <a className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                                    Planner
+                                </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
@@ -105,28 +110,30 @@ const Navbar: NextPage = () => {
     ) : (
         <nav className="bg-transparent px-48 sm:px-4 py-2.5 rounded">
             <div className="px-48 container flex flex-wrap justify-between items-center mx-auto">
-                <a href="#" className="flex items-center">
-                    <Image
-                        src={icon}
-                        className="mr-3 h-6 sm:h-9"
-                        width="30"
-                        height="30"
-                        alt="cotidie-logo"
-                    />
-                    &nbsp;
-                    <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-                        Cotidie
-                    </span>
-                </a>
+                <Link href={"/"}>
+                    <a href="#" className="flex items-center">
+                        <Image
+                            src={icon}
+                            className="mr-3 h-6 sm:h-9"
+                            width="30"
+                            height="30"
+                            alt="cotidie-logo"
+                        />
+                        &nbsp;
+                        <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                            Cotidie
+                        </span>
+                    </a>
+                </Link>
                 <div className="flex md:order-2">
                     <a
-                        href="#"
+                        href={`${process.env.api}/auth/login/discord`}
                         className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
                     >
                         Login
                     </a>
                     <a
-                        href="#"
+                        href={`${process.env.api}/auth/login/discord`}
                         className="bg-white text-[#07070A] rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
                     >
                         Sign Up
@@ -171,25 +178,26 @@ const Navbar: NextPage = () => {
                 >
                     <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
                         <li>
+                            <Link href={"/"}>
+                                <a
+                                    className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                                    aria-current="page"
+                                >
+                                    Home
+                                </a>
+                            </Link>
+                        </li>
+                        <li>
                             <a
-                                href="#"
+                                href="#Features"
                                 className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                                aria-current="page"
                             >
-                                Home
+                                Features
                             </a>
                         </li>
                         <li>
                             <a
-                                href="#"
-                                className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
-                            >
-                                Leaderboard
-                            <a>
-                        </li>
-                        <li>
-                            <a
-                                href="#"
+                                href="#faq"
                                 className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                             >
                                 About
