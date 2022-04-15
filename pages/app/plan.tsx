@@ -62,7 +62,7 @@ const Plan: NextPage<{ token?: string }> = ({ token }) => {
     const createSchedule = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
-        console.log(form.get("task-list"));
+        // console.log(form.get("task-list"));
     };
     return (
         <>

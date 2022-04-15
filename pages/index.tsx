@@ -20,8 +20,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Home: NextPage<{ token?: string }> = ({ token }) => {
-    console.log(token);
-
     const [loggedin, setLoggedin] = useState(token ? true : false);
     const [faq, setFaq] = useState<
         { title: string; desc: string; btntext: string; btnhref: string }[]
@@ -61,7 +59,7 @@ const Home: NextPage<{ token?: string }> = ({ token }) => {
                 <title>Cotidie</title>
                 <link rel="shortcut icon" href={icon.src} type="image/x-icon" />
             </Head>
-            <Navbar loggedin={loggedin}></Navbar>
+            <Navbar loggedin={loggedin} />
             {loggedin ? (
                 <div></div>
             ) : (

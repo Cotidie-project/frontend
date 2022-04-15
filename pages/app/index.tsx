@@ -7,6 +7,7 @@ import Task from "../../components/taskcard";
 import icon from "../../public/icon.ico";
 import Image from "next/image";
 import { serialize } from "cookie";
+import { User } from "../../interface";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies["token"];
@@ -45,9 +46,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-const Home: NextPage<{ user: any }> = ({ user }) => {
+const Home: NextPage<{ user: User }> = ({ user }) => {
     const [loggedin, setLoggedin] = useState(user ? true : false);
-    console.log(user);
 
     const [totalPoints, setTotalPoints] = useState(100);
     const [currentPoints, setCurrentPoints] = useState(69);
@@ -100,7 +100,6 @@ const Home: NextPage<{ user: any }> = ({ user }) => {
         completed.forEach((value) => {
             setTasks((tasks) => tasks.filter((task) => value !== task.id));
         });
-        // console.log(completed, tasks);
     }, [completed]);
     return (
         <>
