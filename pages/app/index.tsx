@@ -3,17 +3,23 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/navbar";
 import Points from "../../components/points";
-import Task from "../../components/taskcard";
+import TaskCard from "../../components/taskcard";
 import icon from "../../public/icon.ico";
 import Image from "next/image";
 import { serialize } from "cookie";
 import { User } from "../../interface";
+import { Task as taskInterface } from "../../interface/task.interface";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const token = context.req.cookies["token"];
     const newLogin = context.query["new"];
 
     if (token) {
+        const tasks = await fetch(
+            `${process.env.api}/tasks/@me?token=${token}`
+        );
+        // console.log( await tasks.json() );
+
         if (newLogin) {
             const response = await fetch(`${process.env.api}/auth/user`, {
                 headers: {
@@ -22,11 +28,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             });
             const data = await response.json();
 
-            // const tasks = await fetch(`${process.env.api}/user/tasks`, {
-            //     headers: {
-            //         "Discord-Token": token,
-            //     },
-            // });
             context.res.setHeader("Set-Cookie", [
                 serialize("user", JSON.stringify(data), {
                     maxAge: 30 * 24 * 60 * 60,
@@ -35,10 +36,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 }),
             ]);
             console.log(context.req.cookies);
-            return { props: { token, user: data } };
+            return { props: { token, user: data, tasks } };
         }
         const data = JSON.parse(context.req.cookies["user"]);
-        return { props: { token, user: data } };
+        return { props: { token, user: data, tasks } };
     }
 
     return {
@@ -46,7 +47,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-const Home: NextPage<{ user: User }> = ({ user }) => {
+const Home: NextPage<{ token: string; user: User; tasks: taskInterface[] }> = (
+    props
+) => {
+    const { token, user } = props;
     const [loggedin, setLoggedin] = useState(user ? true : false);
 
     const [totalPoints, setTotalPoints] = useState(100);
@@ -54,20 +58,21 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
     const taskAreaRef = useRef<HTMLDivElement>(null);
 
     // test data
-    const [tasks, setTasks] = useState([
+    const [tasks, setTasks] = useState<taskInterface[]>(props.tasks);
+    const [testtasks, settestTasks] = useState<taskInterface[]>([
         {
             id: 1,
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completionPoints: 1,
+            points: 1,
         },
         {
             id: 12,
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completionPoints: 1,
+            points: 1,
         },
 
         {
@@ -75,7 +80,7 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completionPoints: 1,
+            points: 1,
         },
 
         {
@@ -83,7 +88,7 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completionPoints: 1,
+            points: 1,
         },
 
         {
@@ -91,7 +96,7 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
             title: "Task 1",
             time: new Date(),
             description: "This is a description",
-            completionPoints: 1,
+            points: 1,
         },
     ]);
 
@@ -148,20 +153,21 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
                                 >
                                     {tasks.length ? (
                                         tasks.map((task, index) => (
-                                            <Task
+                                            <TaskCard
                                                 id={task.id}
                                                 title={task.title}
                                                 time={task.time}
                                                 description={task.description}
                                                 setCompleted={setCompleted}
                                                 completedArray={completed}
-                                                points={{
+                                                propPoints={{
                                                     currentPoints,
                                                     setCurrentPoints,
                                                     completionPoints:
-                                                        task.completionPoints,
+                                                        task.points,
                                                 }}
                                                 key={task.id}
+                                                points={task.points}
                                             />
                                         ))
                                     ) : (
@@ -173,22 +179,32 @@ const Home: NextPage<{ user: User }> = ({ user }) => {
                             </div>
                         </div>
                         <div
-                            id="user info"
-                            className="flex flex-col h-fit gap-4 p-6 pl-10 rounded-lg border border-gray-200 shadow-md dark:bg-[#262633] dark:border-gray-700"
+                            className="grid grid-rows-2 gap-10"
+                            style={{ gridTemplateRows: ".5fr 1.5fr" }}
                         >
-                            <div className="rounded-full p-0.5 border-2 h-24 w-24 overflow-hidden">
-                                <Image
-                                    src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`}
-                                    width="256"
-                                    height="256"
-                                    alt={`${user.username}'s avatar`}
-                                    className="rounded-full m-0 p-0"
-                                />
+                            <div
+                                id="user info"
+                                className="flex flex-col h-fit gap-4 p-6 pl-10 rounded-lg border border-gray-200 shadow-md dark:bg-[#262633] dark:border-gray-700"
+                            >
+                                <div className="rounded-full p-0.5 border-2 h-24 w-24 overflow-hidden">
+                                    <Image
+                                        src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`}
+                                        width="256"
+                                        height="256"
+                                        alt={`${user.username}'s avatar`}
+                                        className="rounded-full m-0 p-0"
+                                    />
+                                </div>
+                                <div className="flex flex-row items-baseline">
+                                    <p className="text-2xl">{user.username}</p>
+                                    <p className="text-sm">{`#${user.discriminator}`}</p>
+                                </div>
                             </div>
-                            {/* <div>{`${user.username}#${user.discriminator}`}</div> */}
-                            <div className="flex flex-row items-baseline">
-                                <p className="text-2xl">{user.username}</p>
-                                <p className="text-sm">{`#${user.discriminator}`}</p>
+                            <div className="flex flex-col gap-4 p-6 rounded-lg border border-gray-200 shadow-md dark:bg-[#262633] dark:border-gray-700">
+                                <div className="font-semibold text-2xl">
+                                    Breaks
+                                </div>
+                                <div className=""></div>
                             </div>
                         </div>
                     </div>

@@ -11,8 +11,12 @@ const Navbar: NextPage<{ loggedin: boolean }> = ({ loggedin }) => {
         // else if (router.pathname === "/") router.push("/app");
     }, [loggedin]);
     return loggedin ? (
-        <nav className="bg-background z-10 sticky top-0 py-2.5 rounded"> {/* px-48 sm:px-4 */}
-            <div className=" container flex flex-wrap justify-evenly items-center mx-auto"> {/* px-48 */} 
+        <nav className="bg-background z-10 sticky top-0 py-2.5 rounded">
+            {" "}
+            {/* px-48 sm:px-4 */}
+            <div className=" container flex flex-wrap justify-evenly items-center mx-auto">
+                {" "}
+                {/* px-48 */}
                 <Link href={"/"}>
                     <a className="flex items-center">
                         <Image

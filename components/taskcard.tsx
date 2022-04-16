@@ -1,25 +1,27 @@
 import { NextPage } from "next";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Task } from "../interface/task.interface";
 
-export interface taskProps {
+export interface taskProps extends Task {
     id: number;
     title: string;
     time: Date;
     description: string;
+    points: number;
     completedArray: number[];
     setCompleted: Dispatch<SetStateAction<number[]>>;
-    points: {
+    propPoints: {
         currentPoints: number;
         setCurrentPoints: Dispatch<SetStateAction<number>>;
         completionPoints: number;
     };
 }
 
-const Task: NextPage<taskProps> = ({ ...task }) => {
+const TaskCard: NextPage<taskProps> = ({ ...task }) => {
     const taskRef = useRef<HTMLDivElement>(null);
     const handleCompleted = () => {
-        task.points.setCurrentPoints(
-            task.points.currentPoints + task.points.completionPoints
+        task.propPoints.setCurrentPoints(
+            task.propPoints.currentPoints + task.propPoints.completionPoints
         );
         // if (taskRef.current) {
         //     taskRef.current.classList.add("")
@@ -65,4 +67,4 @@ const Task: NextPage<taskProps> = ({ ...task }) => {
     );
 };
 
-export default Task;
+export default TaskCard;
