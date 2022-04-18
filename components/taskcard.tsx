@@ -3,13 +3,13 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Task } from "../interface/";
 
 export interface taskProps extends Task {
-    id: number;
+    id: string;
     title: string;
     time: Date;
     description: string;
     points: number;
-    completedArray: number[];
-    setCompleted: Dispatch<SetStateAction<number[]>>;
+    completedArray: string[];
+    setCompleted: Dispatch<SetStateAction<string[]>>;
     propPoints: {
         currentPoints: number;
         setCurrentPoints: Dispatch<SetStateAction<number>>;

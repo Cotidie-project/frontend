@@ -60,48 +60,6 @@ const parseTime = (time: number, date?: string): Date => {
     return new Date(year, month, day, hour, minute);
 };
 
-// test data
-const testTasks = [
-    {
-        id: 1,
-        title: "Task 1",
-        time: new Date(),
-        description: "This is a description",
-        points: 1,
-    },
-    {
-        id: 12,
-        title: "Task 1",
-        time: new Date(),
-        description: "This is a description",
-        points: 1,
-    },
-
-    {
-        id: 13,
-        title: "Task 1",
-        time: new Date(),
-        description: "This is a description",
-        points: 1,
-    },
-
-    {
-        id: 3,
-        title: "Task 1",
-        time: new Date(),
-        description: "This is a description",
-        points: 1,
-    },
-
-    {
-        id: 2,
-        title: "Task 1",
-        time: new Date(),
-        description: "This is a description",
-        points: 1,
-    },
-];
-
 const Home: NextPage<{
     token: string;
     user: User;
@@ -131,16 +89,28 @@ const Home: NextPage<{
             etime: parseTime(x.stime),
         }))
     );
-    // {
-    //     name: "Break",
-    //     stime: new Date(2020, 1, 1, 8, 0, 0),
-    //     etime: new Date(2020, 1, 1, 12, 0, 0),
-    // },
 
-    const [completed, setCompleted] = useState<number[]>([]);
+    const [completed, setCompleted] = useState<string[]>([]);
     useEffect(() => {
         completed.forEach((value) => {
-            setTasks((tasks) => tasks.filter((task) => value !== task.id));
+            setTasks((tasks) =>
+                tasks.filter((task) => {
+                    if (value === task.id) {
+                        fetch(
+                            `${process.env.api}/update/task/${value}?token=${token}`,
+                            {
+                                mode: "no-cors",
+                                method: "POST",
+                                body: JSON.stringify({
+                                    ...task,
+                                    completed: true,
+                                }),
+                            }
+                        );
+                    }
+                    return value !== task.id;
+                })
+            );
         });
     }, [completed]);
     return (
