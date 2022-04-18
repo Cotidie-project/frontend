@@ -7,7 +7,7 @@ import TaskCard from "../../components/taskcard";
 import icon from "../../public/icon.ico";
 import Image from "next/image";
 import { serialize } from "cookie";
-import { User } from "../../interface";
+import { Break, User } from "../../interface";
 import { Task as taskInterface } from "../../interface/task.interface";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -15,10 +15,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const newLogin = context.query["new"];
 
     if (token) {
-        const tasks = await fetch(
-            `${process.env.api}/tasks/@me?token=${token}`
+        const things = [
+            fetch(`${process.env.api}/tasks/@me?token=${token}`),
+            fetch(`${process.env.api}/breaks/@me?token=${token}`),
+        ];
+        const [tasks, breaks] = await Promise.all(
+            (await Promise.all(things)).map((r) => r.json())
         );
-        // console.log( await tasks.json() );
 
         if (newLogin) {
             const response = await fetch(`${process.env.api}/auth/user`, {
@@ -36,10 +39,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 }),
             ]);
             console.log(context.req.cookies);
-            return { props: { token, user: data, tasks } };
+            return { props: { token, user: data, tasks, breaks } };
         }
         const data = JSON.parse(context.req.cookies["user"]);
-        return { props: { token, user: data, tasks } };
+        return { props: { token, user: data, tasks, breaks } };
     }
 
     return {
@@ -47,58 +50,69 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
-const Home: NextPage<{ token: string; user: User; tasks: taskInterface[] }> = (
-    props
-) => {
+// test data
+const testTasks = [
+    {
+        id: 1,
+        title: "Task 1",
+        time: new Date(),
+        description: "This is a description",
+        points: 1,
+    },
+    {
+        id: 12,
+        title: "Task 1",
+        time: new Date(),
+        description: "This is a description",
+        points: 1,
+    },
+
+    {
+        id: 13,
+        title: "Task 1",
+        time: new Date(),
+        description: "This is a description",
+        points: 1,
+    },
+
+    {
+        id: 3,
+        title: "Task 1",
+        time: new Date(),
+        description: "This is a description",
+        points: 1,
+    },
+
+    {
+        id: 2,
+        title: "Task 1",
+        time: new Date(),
+        description: "This is a description",
+        points: 1,
+    },
+];
+
+const Home: NextPage<{
+    token: string;
+    user: User;
+    tasks: taskInterface[];
+    breaks: Break[];
+}> = (props) => {
     const { token, user } = props;
     const [loggedin, setLoggedin] = useState(user ? true : false);
 
     const [totalPoints, setTotalPoints] = useState(100);
     const [currentPoints, setCurrentPoints] = useState(69);
     const taskAreaRef = useRef<HTMLDivElement>(null);
+    const breakAreaRef = useRef<HTMLDivElement>(null);
 
-    // test data
     const [tasks, setTasks] = useState<taskInterface[]>(props.tasks);
-    const [testtasks, settestTasks] = useState<taskInterface[]>([
-        {
-            id: 1,
-            title: "Task 1",
-            time: new Date(),
-            description: "This is a description",
-            points: 1,
-        },
-        {
-            id: 12,
-            title: "Task 1",
-            time: new Date(),
-            description: "This is a description",
-            points: 1,
-        },
-
-        {
-            id: 13,
-            title: "Task 1",
-            time: new Date(),
-            description: "This is a description",
-            points: 1,
-        },
-
-        {
-            id: 3,
-            title: "Task 1",
-            time: new Date(),
-            description: "This is a description",
-            points: 1,
-        },
-
-        {
-            id: 2,
-            title: "Task 1",
-            time: new Date(),
-            description: "This is a description",
-            points: 1,
-        },
-    ]);
+    const [breaks, setBreaks] = useState<Break[]>(props.breaks);
+    // {
+    //     name: "Break",
+    //     stime: new Date(2020, 1, 1, 8, 0, 0),
+    //     etime: new Date(2020, 1, 1, 12, 0, 0),
+    // },
 
     const [completed, setCompleted] = useState<number[]>([]);
     useEffect(() => {
@@ -152,7 +166,7 @@ const Home: NextPage<{ token: string; user: User; tasks: taskInterface[] }> = (
                                     }}
                                 >
                                     {tasks.length ? (
-                                        tasks.map((task, index) => (
+                                        tasks.map((task) => (
                                             <TaskCard
                                                 id={task.id}
                                                 title={task.title}
@@ -204,7 +218,42 @@ const Home: NextPage<{ token: string; user: User; tasks: taskInterface[] }> = (
                                 <div className="font-semibold text-2xl">
                                     Breaks
                                 </div>
-                                <div className=""></div>
+                                <div
+                                    className="customScroll h-full flex flex-col p-5 pr-3 gap-5 overflow-x-clip overflow-y-scroll shadow-inner sm:rounded-lg bg-[#20202d]"
+                                    ref={breakAreaRef}
+                                    onWheel={(e) => {
+                                        breakAreaRef.current?.classList.remove(
+                                            "customScroll"
+                                        );
+                                        setTimeout(() => {
+                                            breakAreaRef.current?.classList.add(
+                                                "customScroll"
+                                            );
+                                        }, 500);
+                                    }}
+                                >
+                                    {breaks.length ? (
+                                        breaks.map((breakItem, index) => (
+                                            <div
+                                                className="flex flex-row justify-between overflow-x-clip shadow-md sm:rounded-lg bg-[#242431]"
+                                                key={index}
+                                            >
+                                                <div className="flex flex-col justify-between p-4 gap-1">
+                                                    <p className="text-xl font-medium">
+                                                        {breakItem.name}
+                                                    </p>
+                                                    <p className="text-sm font-normal italic text-gray-500">
+                                                        {`${breakItem.stime.toLocaleTimeString()} - ${breakItem.etime.toLocaleTimeString()}`}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="flex items-center justify-center text-center h-full font-thin italic text-4xl text-gray-800">
+                                            No Breaks
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>

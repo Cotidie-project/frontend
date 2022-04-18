@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { Task } from "../interface/task.interface";
+import { Task } from "../interface/";
 
 export interface taskProps extends Task {
     id: number;

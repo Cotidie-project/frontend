@@ -33,12 +33,12 @@ const Navbar: NextPage<{ loggedin: boolean }> = ({ loggedin }) => {
                     </a>
                 </Link>
                 <div className="flex md:order-2">
-                    <Link href={"/app/plan"}>
+                    <Link href={"/app/plan?type=day"}>
                         <a className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out">
                             Plan Day
                         </a>
                     </Link>
-                    <Link href={"/app/plan"}>
+                    <Link href={"/app/plan?type=week"}>
                         <a className="bg-white text-[#07070A] rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out">
                             Plan Week
                         </a>
