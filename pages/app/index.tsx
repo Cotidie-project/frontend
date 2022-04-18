@@ -50,6 +50,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 };
 
+const parseTime = (time: number, date?: string): Date => {
+    const _time = time.toString().split(".");
+    const hour = parseInt(_time[0]);
+    const minute = 60 / parseInt(_time[1]);
+    const [year, month, day] = date?.split("-").map((x) => Number(x)) || [
+        2000, 0, 0,
+    ];
+    return new Date(year, month, day, hour, minute);
+};
+
 // test data
 const testTasks = [
     {
@@ -95,8 +105,10 @@ const testTasks = [
 const Home: NextPage<{
     token: string;
     user: User;
-    tasks: taskInterface[];
-    breaks: Break[];
+    // tasks: taskInterface[];
+    tasks: any[];
+    // breaks: Break[];
+    breaks: any[];
 }> = (props) => {
     const { token, user } = props;
     const [loggedin, setLoggedin] = useState(user ? true : false);
@@ -106,8 +118,19 @@ const Home: NextPage<{
     const taskAreaRef = useRef<HTMLDivElement>(null);
     const breakAreaRef = useRef<HTMLDivElement>(null);
 
-    const [tasks, setTasks] = useState<taskInterface[]>(props.tasks);
-    const [breaks, setBreaks] = useState<Break[]>(props.breaks);
+    const [tasks, setTasks] = useState<taskInterface[]>(
+        props.tasks.map((x) => ({
+            ...x,
+            time: parseTime(x.time, x.date),
+        }))
+    );
+    const [breaks, setBreaks] = useState<Break[]>(
+        props.breaks.map((x) => ({
+            ...x,
+            stime: parseTime(x.stime),
+            etime: parseTime(x.stime),
+        }))
+    );
     // {
     //     name: "Break",
     //     stime: new Date(2020, 1, 1, 8, 0, 0),
@@ -170,7 +193,7 @@ const Home: NextPage<{
                                             <TaskCard
                                                 id={task.id}
                                                 title={task.title}
-                                                time={task.time}
+                                                time={task.time as Date}
                                                 description={task.description}
                                                 setCompleted={setCompleted}
                                                 completedArray={completed}
