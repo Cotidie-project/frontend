@@ -30,6 +30,19 @@ const Navbar: NextPage<{ loggedin: boolean }> = ({ loggedin }) => {
                         <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
                             Cotidie
                         </span>
+                </a>
+                <div className="flex md:order-2">
+                    <a
+                        href="#"
+                        className="text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
+                    >
+                        Plan Day
+                    </a>
+                    <a
+                        href="#"
+                        className="bg-white text-[#07070A] rounded-lg font-medium text-sm px-5 py-2.5 text-center mr-3 transition ease-in-out"
+                    >
+                        Plan Week
                     </a>
                 </Link>
                 <div className="flex md:order-2">
