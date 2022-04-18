@@ -129,7 +129,7 @@ const Navbar: NextPage<{ loggedin: boolean }> = ({ loggedin }) => {
         <nav className="bg-background sticky top-0 z-10 py-2.5 rounded">
             <div className="container flex flex-wrap justify-evenly items-center mx-auto">
                 <Link href={"/"}>
-                    <a href="#" className="flex items-center">
+                    <a className="flex items-center">
                         <Image
                             src={icon}
                             className="mr-3 h-6 sm:h-9"
